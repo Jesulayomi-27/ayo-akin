@@ -115,7 +115,7 @@ export default function About() {
               <div className="absolute -bottom-4 -right-4 bg-white dark:bg-gray-800 rounded-2xl shadow-xl dark:shadow-gray-900/50 p-4 transition-all duration-300">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-[#1B1B1E] dark:text-white transition-colors duration-300">
-                    5+
+                    2+
                   </div>
                   <div className="text-sm text-[#878787] dark:text-gray-300 font-medium transition-colors duration-300">
                     Years Experience

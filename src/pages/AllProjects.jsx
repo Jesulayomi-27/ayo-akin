@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import VideoCard from '../components/VideoCard';
 import { projectsData } from '../data/ProjectsData';
+import { VideoCardSkeleton } from '../components/SkeletonLoader';
 
 const AllProjects = () => {
   const [playingStates, setPlayingStates] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState('All');
   const [searchTerm, setSearchTerm] = useState('');
 
@@ -17,6 +19,11 @@ const AllProjects = () => {
     return matchesCategory && matchesSearch;
   });
 
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 1500);
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <div className="min-h-screen bg-[#FBFBFB] dark:bg-gray-900 py-12 md:py-20">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -26,31 +33,14 @@ const AllProjects = () => {
             ← Back to Home
           </Link>
           <h1 className="text-3xl md:text-5xl font-bold text-[#1B1B1E] dark:text-white mb-4">
-            Video Projects
+            Full Portfolio
           </h1>
+          <p className="text-base md:text-lg text-[#878787] dark:text-gray-300 max-w-2xl mx-auto">
+            Explore all my creative works and cinematic projects
+          </p>
         </div>
 
-        {/* Stats Bar */}
-        <div className="bg-gray-100 dark:bg-gray-800 rounded-xl p-4 mb-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <span className="text-sm text-[#878787] dark:text-gray-400">Total Projects</span>
-              <div className="text-2xl font-bold text-[#1B1B1E] dark:text-white">{projectsData.length}</div>
-            </div>
-            <div>
-              <span className="text-sm text-[#878787] dark:text-gray-400">Total Videos</span>
-              <div className="text-2xl font-bold text-[#1B1B1E] dark:text-white">
-                {projectsData.reduce((total, project) => total + project.videos.length, 0)}
-              </div>
-            </div>
-            <div>
-              <span className="text-sm text-[#878787] dark:text-gray-400">Categories</span>
-              <div className="text-2xl font-bold text-[#1B1B1E] dark:text-white">{categories.length - 1}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Filters and Search */}
+        {/* Filters */}
         <div className="mb-12 flex flex-col md:flex-row gap-4 justify-between items-center">
           <div className="flex flex-wrap gap-2 justify-center">
             {categories.map(cat => (
@@ -82,15 +72,14 @@ const AllProjects = () => {
           </div>
         </div>
 
-        {/* Projects Count */}
-        <div className="mb-6 text-right">
-          <p className="text-sm text-[#878787] dark:text-gray-400">
-            Showing {filteredProjects.length} of {projectsData.length} projects
-          </p>
-        </div>
-
         {/* Projects Grid */}
-        {filteredProjects.length > 0 ? (
+        {isLoading ? (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <VideoCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : filteredProjects.length > 0 ? (
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
             {filteredProjects.map(project => (
               <VideoCard
